@@ -31,9 +31,12 @@ def precompute_single_sizes(X, n_jobs=-1):
     return dict(compressed_results)
 
 
-def get_kernel(X, reg=2, n_jobs=-1):
+def get_kernel(X=None, reg=2, n_jobs=-1):
     """Generates a kernel function based on compressed file sizes and a regularization term."""
-    compressed_single = precompute_single_sizes(X, n_jobs=n_jobs)
+    
+    compressed_single = {}
+    if X is not None:
+        compressed_single = precompute_single_sizes(X, n_jobs=n_jobs)
 
     def kernel(X, Y):
         # Precompute any missing file sizes from Y

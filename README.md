@@ -42,7 +42,9 @@ test_df = pd.read_csv("some_random_test_dataset.csv")
 assert "path" in train_df and "path" in test_df  # X
 assert "label" in train_df and "label" in test_df  # y
 
-kernel = get_kernel(train_df["path"].values, n_jobs=-1)
+# If you want to precompute compressed sizes
+# kernel = get_kernel(train_df["path"].values, n_jobs=-1)
+kernel = get_kernel(n_jobs=-1)
 clf = SVC(kernel=kernel)
 
 clf.fit(train_df["path"].values, train_df["label"].values)
