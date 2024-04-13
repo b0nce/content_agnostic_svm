@@ -5,10 +5,10 @@ from joblib import Parallel, delayed
 
 def compressed_size(file_path, file_path_2=None):
     """Returns the compressed size of one or two files combined."""
-    with open(file_path, 'rb') as file:
+    with open(file_path, "rb") as file:
         content = file.read()
     if file_path_2:
-        with open(file_path_2, 'rb') as file:
+        with open(file_path_2, "rb") as file:
             content += file.read()
     compressed_content = zlib.compress(content)
     return len(compressed_content)
@@ -78,10 +78,10 @@ if __name__ == "__main__":
     assert "path" in test_df  # X
     assert "label" in test_df  # y
 
-    ker = get_kernel(train_df['path'].values, n_jobs=-1)
+    ker = get_kernel(train_df["path"].values, n_jobs=-1)
     clf = SVC(kernel=ker)
-    clf.fit(train_df['path'].values, train_df['label'].values)
+    clf.fit(train_df["path"].values, train_df["label"].values)
 
-    test_accuracy = clf.score(test_df['path'].values, test_df['label'].values)
+    test_accuracy = clf.score(test_df["path"].values, test_df["label"].values)
 
-    print(f'{test_accuracy = }')
+    print(f"{test_accuracy = }")
