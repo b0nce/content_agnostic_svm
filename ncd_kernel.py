@@ -1,5 +1,5 @@
-import numpy as np
 import zlib
+import numpy as np
 from joblib import Parallel, delayed
 
 
@@ -9,7 +9,12 @@ def compressed_size(file_path, file_path_2=None):
         content = file.read()
     if file_path_2:
         with open(file_path_2, "rb") as file:
-            content += file.read()
+            file2_content = file.read()
+            # Resolving K(a, b) = K(b, a)
+            if content > file2_content:
+                content += file2_content
+            else:
+                content = file2_content + content
     compressed_content = zlib.compress(content)
     return len(compressed_content)
 
@@ -41,10 +46,7 @@ def get_kernel(X, reg=2, n_jobs=-1):
 
         # Calculate the normalized distance for each pair
         def compute_element(i, fpath1, j, fpath2):
-            if hash(fpath1) > hash(fpath2):
-                combined_size = compressed_size(fpath1, fpath2)
-            else:
-                combined_size = compressed_size(fpath2, fpath1)
+            combined_size = compressed_size(fpath1, fpath2)
             norm_distance = combined_size - min(compressed_single[fpath1], compressed_single[fpath2])
             norm_distance /= max(compressed_single[fpath1], compressed_single[fpath2])
             return (i, j, reg - norm_distance)
